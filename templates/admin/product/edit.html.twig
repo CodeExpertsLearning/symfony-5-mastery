@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Editar Produto</h2>
+        </div>
+        <hr>
+    </div>
+    
+    <div class="col-12">
+        <form action="{{ path('admin_update_products', {product: product.id}) }}" method="post">
+            <div class="form-group">
+                <label>Nome Produto</label>
+                <input type="text" class="form-control" name="name" value="{{ product.name }}">
+            </div>
+
+            <div class="form-group">
+                <label>Descrição</label>
+                <input type="text" class="form-control" name="description" value="{{ product.description }}">
+            </div>
+
+            <div class="form-group">
+                <label>Conteúdo/Informações</label>
+                <textarea name="body" class="form-control">{{ product.body }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Slug</label>
+                <input type="text" class="form-control" name="slug" value="{{ product.slug }}">
+            </div>
+
+            <div class="form-group">
+                <label>Preço</label>
+                <input type="text" class="form-control" name="price" value="{{ product.price }}">
+            </div>
+
+            <div class="form-group">
+                <button class="btn btn-lg btn-success">Atualizar Produto</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
