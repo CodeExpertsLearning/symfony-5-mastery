@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\User;
 
 class DefaultController extends AbstractController
 {
@@ -13,8 +14,9 @@ class DefaultController extends AbstractController
     public function index()
     {
     	$name = 'Nanderson Castro';
+		$user = $this->getDoctrine()->getRepository(User::class)->find(1);
 
-	    return $this->render('index.html.twig', compact('name'));
+	    return $this->render('index.html.twig', compact('name', 'user'));
     }
 
 	/**
