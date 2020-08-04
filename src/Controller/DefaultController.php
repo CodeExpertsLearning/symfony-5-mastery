@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\User;
+use App\Entity\{Category, User, Product};
 
 class DefaultController extends AbstractController
 {
@@ -15,6 +15,21 @@ class DefaultController extends AbstractController
     {
     	$name = 'Nanderson Castro';
 		$user = $this->getDoctrine()->getRepository(User::class)->find(1);
+
+		//Produto e Categoria
+	    $category = $this->getDoctrine()->getRepository(Category::class)->find(1);
+		dump($category->getProducts()->toArray());
+
+//	    $category = new Category();
+//	    $category->setName('Games');
+//	    $category->setSlug('games');
+//	    $category->setCreatedAt(new \DateTime('now', new \DateTimeZone('America/Sao_Paulo')));
+//	    $category->setUpdatedAt(new \DateTime('now', new \DateTimeZone('America/Sao_Paulo')));
+//
+//	    $product->setCategory($category);
+//
+//	    $this->getDoctrine()->getManager()->flush();
+
 
 	    return $this->render('index.html.twig', compact('name', 'user'));
     }

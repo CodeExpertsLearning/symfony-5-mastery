@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\ProductRepository;
+use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=ProductRepository::class)
- * @ORM\Table(name="products")
+ * @ORM\Entity(repositoryClass=CategoryRepository::class)
+ * @ORM\Table(name="categories")
  */
-class Product
+class Category
 {
     /**
      * @ORM\Id()
@@ -25,19 +25,9 @@ class Product
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $description;
-
-    /**
-     * @ORM\Column(type="text")
-     */
-    private $body;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $price;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -55,13 +45,18 @@ class Product
     private $updatedAt;
 
 	/**
-	 * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="product", cascade={"persist"})
+	 * @ORM\ManyToMany(targetEntity=Product::class, mappedBy="category")
 	 */
-    private $category;
+    private $product;
 
     public function __construct()
     {
-    	$this->category = new ArrayCollection();
+    	$this->product = new ArrayCollection();
+    }
+
+    public function getProducts()
+    {
+    	return $this->product;
     }
 
 	public function getId(): ?int
@@ -86,33 +81,9 @@ class Product
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getBody(): ?string
-    {
-        return $this->body;
-    }
-
-    public function setBody(string $body): self
-    {
-        $this->body = $body;
-
-        return $this;
-    }
-
-    public function getPrice(): ?int
-    {
-        return $this->price;
-    }
-
-    public function setPrice(int $price): self
-    {
-        $this->price = $price;
 
         return $this;
     }
@@ -152,21 +123,4 @@ class Product
 
         return $this;
     }
-
-    public function getCategories()
-    {
-		return $this->category;
-    }
-
-    public function setCategory(Category $category): self
-    {
-    	if($this->category->contains($category)) {
-    		return $this;
-	    }
-
-    	$this->category[] = $category;
-
-    	return $this;
-    }
-
 }
