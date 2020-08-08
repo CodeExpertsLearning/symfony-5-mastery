@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\{Category, User, Product};
+use App\Entity\{Category, Order, User, Product};
 
 class DefaultController extends AbstractController
 {
@@ -15,10 +15,15 @@ class DefaultController extends AbstractController
     {
     	$name = 'Nanderson Castro';
 		$user = $this->getDoctrine()->getRepository(User::class)->find(1);
+		$order =  $this->getDoctrine()->getRepository(Order::class)->find(1);
+
+		$user->removeOrder($order);
+
+	    $this->getDoctrine()->getManager()->flush();
 
 		//Produto e Categoria
-	    $category = $this->getDoctrine()->getRepository(Category::class)->find(1);
-		dump($category->getProducts()->toArray());
+	  //  $category = $this->getDoctrine()->getRepository(Category::class)->find(1);
+		//dump($category->getProducts()->toArray());
 
 //	    $category = new Category();
 //	    $category->setName('Games');

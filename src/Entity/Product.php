@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -54,19 +55,19 @@ class Product
      */
     private $updatedAt;
 
-	/**
-	 * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="product", cascade={"persist"})
-	 */
+    /**
+     * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="product")
+     */
     private $category;
 
     public function __construct()
     {
-    	$this->category = new ArrayCollection();
+        $this->category = new ArrayCollection();
     }
 
 	public function getId(): ?int
     {
-        return $this->id;
+         return $this->id;
     }
 
     public function getName(): ?string
@@ -153,20 +154,29 @@ class Product
         return $this;
     }
 
-    public function getCategories()
+    /**
+     * @return Collection|Category[]
+     */
+    public function getCategories(): Collection
     {
-		return $this->category;
+        return $this->category;
     }
 
-    public function setCategory(Category $category): self
+    public function addCategory(Category $category): self
     {
-    	if($this->category->contains($category)) {
-    		return $this;
-	    }
+        if (!$this->category->contains($category)) {
+            $this->category[] = $category;
+        }
 
-    	$this->category[] = $category;
-
-    	return $this;
+        return $this;
     }
 
+    public function removeCategory(Category $category): self
+    {
+        if ($this->category->contains($category)) {
+            $this->category->removeElement($category);
+        }
+
+        return $this;
+    }
 }
