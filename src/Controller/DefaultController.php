@@ -13,13 +13,13 @@ class DefaultController extends AbstractController
      */
     public function index()
     {
-    	$name = 'Nanderson Castro';
+    	$name = 'Symfony 5 Mastery';
 		$user = $this->getDoctrine()->getRepository(User::class)->find(1);
-		$order =  $this->getDoctrine()->getRepository(Order::class)->find(1);
+//		$order =  $this->getDoctrine()->getRepository(Order::class)->find(1);
 
-		$user->removeOrder($order);
+//		$user->removeOrder($order);
 
-	    $this->getDoctrine()->getManager()->flush();
+//	    $this->getDoctrine()->getManager()->flush();
 
 		//Produto e Categoria
 	  //  $category = $this->getDoctrine()->getRepository(Category::class)->find(1);

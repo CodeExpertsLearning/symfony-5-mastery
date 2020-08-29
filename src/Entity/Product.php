@@ -6,7 +6,7 @@ use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Asserts;
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
  * @ORM\Table(name="products")
@@ -22,26 +22,32 @@ class Product
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Asserts\NotBlank(message="Este campo é requerido!")
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Asserts\NotBlank(message="Este campo é requerido!")
+     * @Asserts\Length(min=30, minMessage="Descrição deve ter pelo menos 30 caracteres")
      */
     private $description;
 
     /**
      * @ORM\Column(type="text")
+     * @Asserts\NotBlank(message="Este campo é requerido!")
      */
     private $body;
 
     /**
      * @ORM\Column(type="integer")
+     * @Asserts\NotBlank(message="Este campo é requerido!")
      */
     private $price;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Asserts\NotBlank(message="Este campo é requerido!")
      */
     private $slug;
 
