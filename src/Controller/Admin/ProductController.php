@@ -2,11 +2,14 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\ProductPhoto;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use App\Service\UploadService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -18,19 +21,30 @@ class ProductController extends AbstractController
     /**
      * @Route("/", name="index_products")
      */
-    public function index(ProductRepository $productRepository, UploadService $uploadService)
+    public function index(ProductRepository $productRepository)
     {
-    	dump($uploadService->upload());
-
 	    $products = $productRepository->findAll();
 
 	    return $this->render('admin/product/index.html.twig', compact('products'));
     }
 
+
+	/**
+	 * @Route("/upload")
+	 */
+//	public function upload(Request $request, UploadService $uploadService)
+//	{
+//		/** @var UploadedFile[] $photos */
+//		$photos = $request->files->get('photos');
+//		$uploadService->upload($photos, 'products');
+//
+//		return new Response('Upload');
+//	}
+
 	/**
 	 * @Route("/create", name="create_products")
 	 */
-	public function create(Request $request, EntityManagerInterface $em)
+	public function create(Request $request, EntityManagerInterface $em, UploadService $uploadService)
 	{
 		$form = $this->createForm(ProductType::class);
 
@@ -41,6 +55,15 @@ class ProductController extends AbstractController
 			$product = $form->getData();
 			$product->setCreatedAt();
 			$product->setUpdatedAt();
+
+			$photosUpload = $form['photos']->getData();
+
+			if($photosUpload) {
+				$photosUpload = $uploadService->upload($photosUpload, 'products');
+				$photosUpload = $this->makeProductPhotoEntities($photosUpload);
+
+				$product->addManyProductPhoto($photosUpload);
+			}
 
 			$em->persist($product);
 			$em->flush();
@@ -58,7 +81,7 @@ class ProductController extends AbstractController
 	/**
 	 * @Route("/edit/{product}", name="edit_products")
 	 */
-	public function edit($product, Request $request, ProductRepository $productRepository, EntityManagerInterface $em)
+	public function edit($product, Request $request, ProductRepository $productRepository, EntityManagerInterface $em, UploadService $uploadService)
 	{
 		$product = $productRepository->find($product);
 
@@ -71,6 +94,15 @@ class ProductController extends AbstractController
 			$product = $form->getData();
 			$product->setUpdatedAt();
 
+			$photosUpload = $form['photos']->getData();
+
+			if($photosUpload) {
+				$photosUpload = $uploadService->upload($photosUpload, 'products');
+				$photosUpload = $this->makeProductPhotoEntities($photosUpload);
+
+				$product->addManyProductPhoto($photosUpload);
+			}
+
 			$em->flush();
 
 			$this->addFlash('success', 'Produto atualizado com sucesso!');
@@ -79,7 +111,8 @@ class ProductController extends AbstractController
 		}
 
 		return $this->render('admin/product/edit.html.twig', [
-			'form' => $form->createView()
+			'form' => $form->createView(),
+			'productPhotos' => $product->getProductPhotos()
 		]);
 	}
 
@@ -104,4 +137,18 @@ class ProductController extends AbstractController
 		}
 	}
 
+	private function makeProductPhotoEntities($uploadedPhotos)
+	{
+		$entities = [];
+
+		foreach($uploadedPhotos as $photo) {
+			$productPhoto = new ProductPhoto();
+			$productPhoto->setPhoto($photo);
+			$productPhoto->setCreatedAt(new \DateTime('now', new \DateTimeZone("America/Sao_Paulo")));
+			$productPhoto->setUpdatedAt(new \DateTime('now', new \DateTimeZone("America/Sao_Paulo")));
+			$entities[] = $productPhoto;
+		}
+
+		return $entities;
+	}
 }
