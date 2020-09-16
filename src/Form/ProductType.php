@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class ProductType extends AbstractType
 {
@@ -29,7 +30,17 @@ class ProductType extends AbstractType
             ])
 	        ->add('photos', FileType::class, [
 	        	'mapped' => false,
-		        'multiple' => true
+		        'multiple' => true,
+		        'constraints' => [
+		        	new Assert\All(
+		        		[
+		        			'constraints' => [
+		        			    new Assert\Image([
+		        			    	'mimeTypesMessage' => 'Imagens inválidas!'
+					            ])
+				        ]]
+			        )
+		        ]
  	        ])
             ->add('category', null, [
 	            'label' => 'Categorias',

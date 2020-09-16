@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Product;
 use App\Entity\ProductPhoto;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
@@ -14,12 +15,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @Route("/admin/products", name="admin_")
+ * @Route("/admin/products", name="admin_products_")
  */
 class ProductController extends AbstractController
 {
     /**
-     * @Route("/", name="index_products")
+     * @Route("/", name="index")
      */
     public function index(ProductRepository $productRepository)
     {
@@ -42,7 +43,7 @@ class ProductController extends AbstractController
 //	}
 
 	/**
-	 * @Route("/create", name="create_products")
+	 * @Route("/create", name="create")
 	 */
 	public function create(Request $request, EntityManagerInterface $em, UploadService $uploadService)
 	{
@@ -68,7 +69,7 @@ class ProductController extends AbstractController
 
 			$this->addFlash('success', 'Produto criado com sucesso!');
 
-			return $this->redirectToRoute('admin_index_products');
+			return $this->redirectToRoute('admin_products_index');
 		}
 
 		return $this->render('admin/product/create.html.twig', [
@@ -77,12 +78,10 @@ class ProductController extends AbstractController
 	}
 
 	/**
-	 * @Route("/edit/{product}", name="edit_products")
+	 * @Route("/edit/{product}", name="edit")
 	 */
-	public function edit($product, Request $request, ProductRepository $productRepository, EntityManagerInterface $em, UploadService $uploadService)
+	public function edit(Product $product, Request $request, EntityManagerInterface $em, UploadService $uploadService)
 	{
-		$product = $productRepository->find($product);
-
 		$form = $this->createForm(ProductType::class, $product);
 
 		$form->handleRequest($request);
@@ -104,7 +103,7 @@ class ProductController extends AbstractController
 
 			$this->addFlash('success', 'Produto atualizado com sucesso!');
 
-			return $this->redirectToRoute('admin_edit_products', ['product' => $product->getId()]);
+			return $this->redirectToRoute('admin_products_edit', ['product' => $product->getId()]);
 		}
 
 		return $this->render('admin/product/edit.html.twig', [
@@ -114,20 +113,18 @@ class ProductController extends AbstractController
 	}
 
 	/**
-	 * @Route("/remove/{product}", name="remove_products")
+	 * @Route("/remove/{product}", name="remove")
 	 */
-	public function remove($product, ProductRepository $productRepository)
+	public function remove(Product $product)
 	{
 		try{
-			$product = $productRepository->find($product);
-
 		   $manager = $this->getDoctrine()->getManager();
 		   $manager->remove($product);
 		   $manager->flush();
 
 		   $this->addFlash('success', 'Produto removido com sucesso!');
 
-		   return $this->redirectToRoute('admin_index_products');
+		   return $this->redirectToRoute('admin_products_index');
 
 		} catch (\Exception $e) {
 			die($e->getMessage());
