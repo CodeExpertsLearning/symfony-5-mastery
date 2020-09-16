@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Product;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -26,7 +27,6 @@ class ProductType extends AbstractType
             ->add('price', TextType::class, [
 	            'label' => 'Preço'
             ])
-            ->add('slug')
 	        ->add('photos', FileType::class, [
 	        	'mapped' => false,
 		        'multiple' => true
@@ -40,6 +40,23 @@ class ProductType extends AbstractType
 	            //'multiple' => false
             ])
         ;
+
+        $builder->get('price')
+	        ->addModelTransformer(new CallbackTransformer(
+		        function($price){
+		        	$price = $price / 100;
+
+			        //Para a exibicao do dado no input
+			        return number_format($price, 2, ',', '.');
+		        },
+		        function($price){
+			        $price = (float) str_replace(['.', ','], ['', '.'], $price);
+			        $price = $price * 100;
+			        $price = (int) ceil($price);
+
+			        return $price;
+		        }
+	        ));
     }
 
     public function configureOptions(OptionsResolver $resolver)

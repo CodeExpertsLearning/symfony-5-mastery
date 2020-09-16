@@ -7,14 +7,11 @@
 
         {{ form_row(form.body) }}
 
-        {{ form_row(form.price) }}
+        {{ form_row(form.price, {'attr': {'class': 'price'}}) }}
 
         {{ form_row(form.photos) }}
 
         {{ form_row(form.category) }}
-
-
-        {{ form_row(form.slug) }}
 
         <button type="submit" class="btn btn-lg btn-success">{{ buttonText }}</button>
 

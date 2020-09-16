@@ -53,8 +53,6 @@ class ProductController extends AbstractController
 		if($form->isSubmitted() && $form->isValid()) {
 
 			$product = $form->getData();
-			$product->setCreatedAt();
-			$product->setUpdatedAt();
 
 			$photosUpload = $form['photos']->getData();
 
@@ -92,7 +90,6 @@ class ProductController extends AbstractController
 		if($form->isSubmitted() && $form->isValid()) {
 
 			$product = $form->getData();
-			$product->setUpdatedAt();
 
 			$photosUpload = $form['photos']->getData();
 

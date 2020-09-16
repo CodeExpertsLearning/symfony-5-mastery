@@ -6,13 +6,18 @@ use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Asserts;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
  * @ORM\Table(name="products")
  */
 class Product
 {
+	use TimestampableEntity;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -47,19 +52,9 @@ class Product
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Asserts\NotBlank(message="Este campo é requerido!")
+     * @Gedmo\Slug(fields={"name"})
      */
     private $slug;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $createdAt;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $updatedAt;
 
     /**
      * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="product")
@@ -138,30 +133,6 @@ class Product
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(?\DateTimeInterface $createdAt = null): self
-    {
-        $this->createdAt = new \DateTime('now', new \DateTimeZone('America/Sao_Paulo'));
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt = null): self
-    {
-        $this->updatedAt = new \DateTime('now', new \DateTimeZone('America/Sao_Paulo'));
 
         return $this;
     }
