@@ -7,12 +7,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="users")
  */
-class User
+class User implements UserInterface
 {
 	use TimestampableEntity;
 
@@ -42,6 +43,11 @@ class User
      * @ORM\Column(type="string", length=255)
      */
     private $password;
+
+	/**
+	 * @ORM\Column(type="json")
+	 */
+    private $roles;
 
     /**
      * @ORM\OneToOne(targetEntity=Address::class, mappedBy="user", cascade={"persist", "remove"})
@@ -159,4 +165,35 @@ class User
 
         return $this;
     }
+
+    public function setRoles($roles)
+    {
+    	$this->roles = $roles;
+    	return $this;
+    }
+
+	public function getRoles()
+	{
+		$roles = $this->roles;
+		$roles[] = 'ROLE_USER';
+
+		return $roles;
+	}
+
+	public function getSalt()
+	{
+		return null;
+	}
+
+	public function getUsername()
+	{
+		return $this->email;
+	}
+
+	public function eraseCredentials()
+	{
+		// TODO: Implement eraseCredentials() method.
+	}
+
+
 }

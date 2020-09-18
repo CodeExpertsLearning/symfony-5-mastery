@@ -9,8 +9,6 @@ use App\Repository\ProductRepository;
 use App\Service\UploadService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -21,9 +19,13 @@ class ProductController extends AbstractController
 {
     /**
      * @Route("/", name="index")
+     * Security("is_granted('ROLE_ADMIN')")
+     * IsGranted("ROLE_USER")
      */
     public function index(ProductRepository $productRepository)
     {
+    	//$this->denyAccessUnlessGranted('ROLE_USER');
+
 	    $products = $productRepository->findAll();
 
 	    return $this->render('admin/product/index.html.twig', compact('products'));

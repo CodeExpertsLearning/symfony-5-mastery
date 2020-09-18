@@ -9,7 +9,7 @@ use App\Entity\{Category, Order, User, Product};
 class DefaultController extends AbstractController
 {
     /**
-     * @Route("/", name="default")
+     * @Route("/", name="home")
      */
     public function index()
     {
@@ -35,6 +35,18 @@ class DefaultController extends AbstractController
 //
 //	    $this->getDoctrine()->getManager()->flush();
 
+
+//	    $user = new User();
+//	    $user->setFirstName('Admin');
+//	    $user->setLastName('Admin');
+//	    $user->setEmail('admin@admin.com');
+//	    $user->setPassword('$argon2id$v=19$m=65536,t=4,p=1$M3N+rP6iLuKexyvbDb+2pw$RbJYp29WnbdoIW6H6r7LE1dLcZSsnM9X5CbKhwqQogw');
+//	    $user->setRoles(['ROLE_ADMIN', 'ROLE_USER']);
+//
+//	    $this->getDoctrine()->getManager()->persist($user);
+//	    $this->getDoctrine()->getManager()->flush();
+//
+//dd($user);
 
 	    return $this->render('index.html.twig', compact('name', 'user'));
     }
