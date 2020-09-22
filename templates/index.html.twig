@@ -1,8 +1,27 @@
-{% extends 'base.html.twig' %}
+{% extends 'front.html.twig' %}
 
 {% block body %}
-    <h1>Hello, {{ name }}!</h1>
-    <hr>
 
-    Endereço de {{ user.email }}: {{ user.address.address }}, {{ user.address.number }} - {{ user.address.zipcode }}
+    <div class="row mb-3">
+        {% for key, product in products %}
+
+            <div class="col-3">
+                <div class="card">
+                    {% if product.productPhotos.count() %}
+                        <img src="{{ asset('/uploads/products/' ~ product.productPhotos.first().photo) }}" alt="" class="card-img-top">
+                    {% else %}
+                        <img src="{{ asset('images/no-photo.jpg') }}" alt="" class="img-fluid">
+                    {% endif %}
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">{{ product.description }}</p>
+                        <a href="{{ path('product_single', {'slug': product.slug}) }}">Ver Produto</a>
+                    </div>
+                </div>
+            </div>
+            {% if (key + 1) % 4 == 0 %} </div><div class="row mb-3"> {% endif %}
+        {% endfor %}
+    </div>
+
 {% endblock %}

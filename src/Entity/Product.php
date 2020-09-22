@@ -118,6 +118,13 @@ class Product
         return $this->price;
     }
 
+    public function getFloatPrice(): ?float
+    {
+    	$price = $this->getPrice();
+
+    	return $price / 100;
+    }
+
     public function setPrice(int $price): self
     {
         $this->price = $price;
