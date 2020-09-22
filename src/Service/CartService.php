@@ -18,12 +18,17 @@ class CartService
 
 	public function getAll()
 	{
-		return $this->session->has('cart') ? $this->session->get('cart') : [];
+		if(!$this->session->has('cart')) return [];
+
+		$cart = $this->session->get('cart');
+
+		if(!is_array($cart)) return [];
+
+		return count($cart) >= 1 ? $cart : [];
 	}
 
 	public function addItem($item)
 	{
-		//Se tem carrinho na sessao
 		$cart = $this->getAll();
 
 		if(count($cart)) {
@@ -39,6 +44,26 @@ class CartService
 
 	public function removeItem($item)
 	{
+		$cart = $this->getAll();
 
+		if(count($cart) == 0) return $cart;
+
+		$cart = array_filter($cart, function($itemArr) use($item){
+			return $itemArr['slug'] != $item;
+		});
+
+		if(count($cart) == 0) {
+			$this->session->remove('cart');
+			return [];
+		}
+
+		$this->session->set('cart', $cart);
+	}
+
+	public function destroyCart()
+	{
+		$this->session->remove('cart');
+
+		return true;
 	}
 }
