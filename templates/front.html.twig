@@ -29,11 +29,17 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="{{path('home')}}">Home <span class="sr-only">(current)</span></a>
                 </li>
+                {% for category in categories.findAll() %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{path('home_category', {'slug': category.slug})}}">{{ category.name }}</a>
+                    </li>
+                {% endfor %}
+
             </ul>
 
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            <form class="form-inline my-2 my-lg-0" action="{{ path('home_search') }}">
+                <input class="form-control mr-sm-2" type="search" name="s" placeholder="Encontre seu produto..." aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
             </form>
         </div>
     </nav>
