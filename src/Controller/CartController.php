@@ -43,7 +43,9 @@ class CartController extends AbstractController
 		$product['price'] = $product['price'] / 100;
 		$product['amount'] = $request->request->get('amount');
 
-		$this->cart->addItem($product);
+		$result = $this->cart->addItem($product);
+
+		$this->addFlash('success', $result);
 
 		return $this->redirectToRoute('product_single', ['slug' => $product['slug']]);
 	}
@@ -55,6 +57,8 @@ class CartController extends AbstractController
 	{
 		$this->cart->removeItem($item);
 
+		$this->addFlash('success', 'Produto removido com sucesso!');
+
 		return $this->redirectToRoute('home_cart');
 	}
 
@@ -65,6 +69,7 @@ class CartController extends AbstractController
 	{
 		$this->cart->destroyCart();
 
+		$this->addFlash('success', 'Carrinho cancelado com sucesso!');
 		return $this->redirectToRoute('home_cart');
 	}
 }

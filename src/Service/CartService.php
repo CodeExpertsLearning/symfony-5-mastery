@@ -30,12 +30,14 @@ class CartService
 	public function addItem($item)
 	{
 		$cart = $this->getAll();
+		$message = 'Produto adicionado com sucesso!';
 
 		if(count($cart)) {
 			$findSlug = array_column($cart, 'slug');
 
 			if(in_array($item['slug'], $findSlug)) {
 				$cart = $this->incrementCartSlug($cart, $item);
+				$message = sprintf('Quantidade do Produto %s Adicionado com sucesso!', $item['name']);
 			} else {
 				array_push($cart, $item);
 			}
@@ -47,7 +49,7 @@ class CartService
 
 		$this->session->set('cart', $cart);
 
-		return true;
+		return $message;
 	}
 
 	public function removeItem($item)
