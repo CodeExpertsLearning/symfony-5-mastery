@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass=OrderRepository::class)
@@ -23,11 +24,13 @@ class Order
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Serializer\Groups({"user_orders"})
      */
     private $reference;
 
     /**
      * @ORM\Column(type="text")
+     * @Serializer\Groups({"user_orders"})
      */
     private $items;
 

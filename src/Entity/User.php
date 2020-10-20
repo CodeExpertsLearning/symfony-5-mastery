@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -28,18 +29,21 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Campo requerido!")
+     * @Serializer\Groups({"profile"})
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Campo requerido!")
+     * @Serializer\Groups({"profile"})
      */
     private $lastName;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Campo requerido!")
+     * @Serializer\Groups({"profile"})
      */
     private $email;
 
@@ -55,11 +59,13 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToOne(targetEntity=Address::class, mappedBy="user", cascade={"persist", "remove"})
+     * @Serializer\Groups({"profile"})
      */
     private $address;
 
     /**
      * @ORM\OneToMany(targetEntity=Order::class, mappedBy="user", orphanRemoval=true)
+     * @Serializer\Groups({"user_orders"})
      */
     private $order;
 
