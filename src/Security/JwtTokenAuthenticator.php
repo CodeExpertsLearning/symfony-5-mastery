@@ -20,10 +20,12 @@ use Lcobucci\JWT\Parser;
 class JwtTokenAuthenticator extends AbstractGuardAuthenticator
 {
 	private $userRepository;
+	private $key;
 
-	public function __construct(UserRepository $userRepository)
+	public function __construct(UserRepository $userRepository, string $key)
 	{
 		$this->userRepository = $userRepository;
+		$this->key = $key;
 	}
 
 	public function supports(Request $request)
@@ -43,7 +45,7 @@ class JwtTokenAuthenticator extends AbstractGuardAuthenticator
     {
 	    $token = (new Parser())->parse((string) $credentials);
 
-		if(!$token->verify(new Sha256(), 'testing')) {
+		if(!$token->verify(new Sha256(), $this->key)) {
 			throw new CustomUserMessageAuthenticationException('Invalid Token');
 		}
 
@@ -73,7 +75,11 @@ class JwtTokenAuthenticator extends AbstractGuardAuthenticator
 
     public function start(Request $request, AuthenticationException $authException = null)
     {
-        // todo
+        return new JsonResponse([
+        	'data' => [
+        		'message' => 'Token not provided!'
+	        ]
+        ], 401);
     }
 
     public function supportsRememberMe()

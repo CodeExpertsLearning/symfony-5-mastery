@@ -14,6 +14,15 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        api:
+            pattern: ^/api
+            stateless: true
+            guard:
+                authenticators:
+                    - App\Security\ApiLoginAuthenticator
+                    - App\Security\JwtTokenAuthenticator
+                entry_point: App\Security\JwtTokenAuthenticator
+
         main:
             anonymous: true
             lazy: true
@@ -31,9 +40,7 @@ security:
             guard:
                 authenticators:
                     - App\Security\LoginFormAuthenticator
-                    - App\Security\ApiLoginAuthenticator
-                    - App\Security\JwtTokenAuthenticator
-                entry_point: App\Security\LoginFormAuthenticator
+
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
 
@@ -46,8 +53,7 @@ security:
          #- {path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY}
          - {path: ^/admin/(products|categories), roles: ROLE_MANAGER}
          - {path: ^/admin, roles: ROLE_ADMIN }
-         - { path: ^/api/orders, roles: ROLE_USER }
-         - { path: ^/api/profiles, roles: ROLE_USER }
+         - { path: ^/api, roles: ROLE_USER }
 
     role_hierarchy:
         ROLE_ADMIN: ROLE_MANAGER
