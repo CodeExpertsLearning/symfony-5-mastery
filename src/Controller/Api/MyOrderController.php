@@ -14,9 +14,9 @@ class MyOrderController extends AbstractController
     /**
      * @Route("/", name="get", methods={"GET"})
      */
-    public function index(UserRepository $repo)
+    public function index()
     {
-		$user = $repo->find(1);
+		$user = $this->getUser();
 
         return $this->json([
             'data' => [
