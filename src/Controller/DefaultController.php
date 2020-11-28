@@ -6,17 +6,19 @@ use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Product;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class DefaultController extends AbstractController
 {
     /**
      * @Route("/", name="home")
      */
-    public function index(ProductRepository $productRepository)
+    public function index(/*, SerializerInterface $serializer*/)
     {
-		$products = $productRepository->findBy([], ['createdAt' => 'DESC']);
+		//$products = $productRepository->findBy([], ['createdAt' => 'DESC']);
+		//$products = $serializer->serialize($products, 'json', ['groups' => ['productList']]);
 
-	    return $this->render('index.html.twig', compact('products'));
+	    return $this->render('index.html.twig');
     }
 
 	/**

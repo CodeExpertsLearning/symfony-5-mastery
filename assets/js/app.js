@@ -10,5 +10,38 @@ import '../css/app.css';
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to import it.
 // import $ from 'jquery';
+import Vue from 'vue';
 
-console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
+import Products from './components/products';
+//
+// Vue.component('product-list', {
+//     props: {
+//       products: {
+//           type: Array,
+//           required: true
+//       }
+//     },
+//     template: `
+//         <div class="row">
+//             <div class="col-3 mb-10" v-for="product in products">
+//               <div class="card">
+//                     <img src="" alt="" class="card-img-top">
+//                     <img :src="'/images/no-photo.jpg'" alt="" class="img-fluid">
+//
+//                     <div class="card-body">
+//                       <h5 class="card-title">{{ product.name }}</h5>
+//                       <p class="card-text">{{ product.description }}</p>
+//                       <a :href="product.slug">Ver Produto</a>
+//                     </div>
+//               </div>
+//             </div>
+//         </div>
+//     `
+// });
+
+new Vue({
+    render(h) {
+        return h(Products);
+    }
+}).$mount('#app');
+
