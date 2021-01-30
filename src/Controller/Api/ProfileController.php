@@ -40,6 +40,7 @@ class ProfileController extends AbstractController
 		$form->submit($request->request->all());
 
 		if(!$form->isValid()) {
+			return $form->getErrors();
 			return $this->json(['data' => [
 				'errors' => $formErrors->getErrors($form)
 			]], 400);
