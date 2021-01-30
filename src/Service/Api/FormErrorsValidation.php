@@ -1,4 +1,6 @@
 <?php
+
+
 namespace App\Service\Api;
 
 use Symfony\Component\Form\FormInterface;
@@ -13,10 +15,10 @@ class FormErrorsValidation
 			$errors[] = $error->getMessage();
 		}
 
-		foreach($form->all() as $childForm) {
-			if($childForm instanceof FormInterface) {
+		foreach ($form->all() as $childForm) {
+			if ($childForm instanceof FormInterface) {
 
-				if($e = $this->getErrors($childForm)) {
+				if ($e = $this->getErrors($childForm)) {
 					$errors[$childForm->getName()] = $e;
 				}
 			}

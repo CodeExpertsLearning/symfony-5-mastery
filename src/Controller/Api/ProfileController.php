@@ -39,8 +39,7 @@ class ProfileController extends AbstractController
 		$form = $this->createForm(UserProfileType::class, $user);
 		$form->submit($request->request->all());
 
-		if(!$form->isValid()) {
-			return $form->getErrors();
+		if (!$form->isValid()) {
 			return $this->json(['data' => [
 				'errors' => $formErrors->getErrors($form)
 			]], 400);
@@ -55,29 +54,29 @@ class ProfileController extends AbstractController
 		]);
 	}
 
-    /**
-     *
-     * @Route("/password", name="update_password", methods={"PUT", "PATCH"})
-     */
-    public function index(Request $request, UserPasswordEncoderInterface $passwordEncoder)
-    {
-    	$plainPassword = $request->request->get('password');
+	/**
+	 *
+	 * @Route("/password", name="update_password", methods={"PUT", "PATCH"})
+	 */
+	public function index(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+	{
+		$plainPassword = $request->request->get('password');
 
-    	if(!$plainPassword) {
-    		return $this->json(['data' => [
-    			'message' => 'O campo senha é requerido...'
-		    ]], 400);
-	    }
+		if (!$plainPassword) {
+			return $this->json(['data' => [
+				'message' => 'O campo senha é requerido...'
+			]], 400);
+		}
 
-	    $user = $this->getUser();
+		$user = $this->getUser();
 
-    	$password = $passwordEncoder->encodePassword($user, $plainPassword);
-    	$user->setPassword($password);
+		$password = $passwordEncoder->encodePassword($user, $plainPassword);
+		$user->setPassword($password);
 
-    	$this->getDoctrine()->getManager()->flush();
+		$this->getDoctrine()->getManager()->flush();
 
-        return $this->json([
-            'message' => 'Senha atualizada com sucesso!',
-        ]);
-    }
+		return $this->json([
+			'message' => 'Senha atualizada com sucesso!',
+		]);
+	}
 }
